@@ -68,7 +68,7 @@ class UsersController {
       avatar = ?,
       updated_at = DATETIME('now')
       WHERE id = ?`,
-      [user.name, user.email, user.password, user.avatar, id]    
+      [user.name, user.email, user.password, user.avatar, id]
     );
 
     return res.status(200).json();
