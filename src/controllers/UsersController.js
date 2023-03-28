@@ -9,6 +9,18 @@ class UsersController {
     const database = await sqliteConnection();
     const checkUserExists = await database.get("SELECT * FROM users WHERE email = (?)", [ email ]);
 
+    if(!name) {
+      throw new AppError("name must be provided");
+    }
+
+    if(!email) {
+      throw new AppError("email must be provided");
+    }
+
+    if(!password) {
+      throw new AppError("password must be provided");
+    }
+
     if(checkUserExists) {
       throw new AppError("that e-mail already exists");
     }
@@ -18,11 +30,6 @@ class UsersController {
     await database.run("INSERT INTO users (name, email, password, avatar) VALUES (?, ?, ?, ?)", [ name, email, hashedPassword, avatar ]);
 
     return res.status(201).json();
-    // if(!name) {
-    //   throw new AppError("name must be provided");
-    // }
-
-    // res.status(201).json({ name, email, password, avatar });
   }
 
   async update(req, res) {

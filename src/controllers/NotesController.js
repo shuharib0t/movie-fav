@@ -1,3 +1,4 @@
+const AppError = require("../utils/AppError");
 const knex = require("../database/knex");
 
 class NotesController {
@@ -5,20 +6,36 @@ class NotesController {
     const { title, description, rating, tags } = req.body;
     const { user_id } = req.params;
 
+    if(!title) {
+      throw new AppError("title must be provided");
+    }
+
+    if(!description) {
+      throw new AppError("description must be provided");
+    }
+
+    if(!rating) {
+      throw new AppError("rating must be provided");
+    }
+
+    if(!tags) {
+      throw new AppError("tags must be provided");
+    }
+
     const [ note_id ] = await knex("movie_notes").insert({
       title,
       description,
       user_id,
       rating
     });
-
+  
     const tagsInsert = tags.map(name => {
       return {
         note_id,
         name,
         user_id
       }
-    })
+    });
 
     await knex("movie_tags").insert(tagsInsert);
 
